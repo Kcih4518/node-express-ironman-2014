@@ -1,2 +1,35 @@
-<h1>{{title}}</h1>
-<p>Welcome to Handlebars with .handlebars extension!</p>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Welcome to the Chat Room</h2>
+                </div>
+                <div class="card-body">
+                    <form id="join-form">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="username" placeholder="Enter your name" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Join Chat</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const joinForm = document.getElementById('join-form');
+    const usernameInput = document.getElementById('username');
+
+    joinForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = usernameInput.value.trim();
+        if (username) {
+            socket.emit('join', username);
+            window.location.href = '/chat';
+        }
+    });
+</script>
