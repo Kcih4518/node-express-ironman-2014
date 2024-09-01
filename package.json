@@ -1,0 +1,24 @@
+{
+  "name": "node-express-ironman-2014",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "eslint": "^9.9.1",
+    "express": "^4.19.2",
+    "pm2": "^5.4.2"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.29.1"
+  },
+  "scripts": {
+    "start": "pm2 start app.js --name node-express-ironman-2014",
+    "restart": "pm2 restart node-express-ironman-2014",
+    "stop": "pm2 stop node-express-ironman-2014",
+    "delete": "pm2 delete node-express-ironman-2014",
+    "logs": "pm2 logs node-express-ironman-2014",
+    "monit": "pm2 monit"
+  }
+}
