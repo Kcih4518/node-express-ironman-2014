@@ -23,7 +23,8 @@
     }
   },
 
-  "postCreateCommand": "yarn install"
+  "postCreateCommand": "yarn install",
+  "forwardPorts": [3000, 5432]
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
