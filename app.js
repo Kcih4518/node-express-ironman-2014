@@ -6,6 +6,7 @@ const { createServer } = require("http");
 const { join } = require("path");
 const pkg = require("./models/index.js");
 const authRoutes = require("./routes/authRoutes.js");
+const todoRoutes = require("./routes/todoRoutes.js");
 
 const { sequelize } = pkg;
 
@@ -16,6 +17,10 @@ const server = createServer(app);
 const hbs = create({
   defaultLayout: "main",
   extname: ".handlebars",
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
 });
 
 app.engine("handlebars", hbs.engine);
@@ -45,7 +50,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", authRoutes);
-// app.use("/todos", todoRoutes);
+app.use("/todos", todoRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
