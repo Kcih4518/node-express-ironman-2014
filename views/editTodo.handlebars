@@ -1,0 +1,13 @@
+<h2>Edit Todo</h2>
+<form action="/todos/{{todo.id}}/update" method="POST">
+    <div class="mb-3">
+        <label for="text" class="form-label">Todo Text</label>
+        <input type="text" class="form-control" id="text" name="text" value="{{todo.text}}" required>
+    </div>
+    <div class="mb-3">
+        <p>Status: {{#if todo.completed}}Completed{{else}}Not Completed{{/if}}</p>
+        <p class="text-muted">Note: You can only change the todo text here. Use the toggle button on the main page to change the completion status.</p>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="/todos" class="btn btn-secondary">Cancel</a>
+</form>

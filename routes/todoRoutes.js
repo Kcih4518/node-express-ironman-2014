@@ -25,4 +25,31 @@ router.post("/:id/toggle", authenticateJWT, async (req, res) => {
   res.redirect("/todos");
 });
 
+router.post("/:id/delete", authenticateJWT, async (req, res) => {
+  const id = parseInt(req.params.id);
+  await Todo.destroy({ where: { id, userId: req.user.id } });
+  res.redirect("/todos");
+});
+
+router.get("/:id/edit", authenticateJWT, async (req, res) => {
+  const id = parseInt(req.params.id);
+  const todo = await Todo.findOne({ where: { id, userId: req.user.id } });
+  if (todo) {
+    res.render("editTodo", { todo });
+  } else {
+    res.redirect("/todos");
+  }
+});
+
+router.post("/:id/update", authenticateJWT, async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { text } = req.body;
+  const todo = await Todo.findOne({ where: { id, userId: req.user.id } });
+  if (todo) {
+    todo.text = text;
+    await todo.save();
+  }
+  res.redirect("/todos");
+});
+
 module.exports = router;

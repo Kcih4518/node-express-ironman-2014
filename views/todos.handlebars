@@ -13,10 +13,14 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title {{#if this.completed}}text-muted{{/if}}">{{this.text}}</h5>
-                    <form action="/todos/{{this.id}}/toggle" method="POST">
+                    <form action="/todos/{{this.id}}/toggle" method="POST" class="d-inline">
                         <button type="submit" class="btn btn-sm {{#if this.completed}}btn-success{{else}}btn-secondary{{/if}}">
                             {{#if this.completed}}Completed{{else}}Mark as Completed{{/if}}
                         </button>
+                    </form>
+                    <a href="/todos/{{this.id}}/edit" class="btn btn-sm btn-primary">Edit</a>
+                    <form action="/todos/{{this.id}}/delete" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>
                 </div>
             </div>
