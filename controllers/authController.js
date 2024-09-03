@@ -1,21 +1,27 @@
 const authServices = require("../services/authService.js");
 
 const login = async (req, res) => {
-  const { username, password } = req.body;
-  const user = await authServices.findUserByUsername(username);
+  try {
+    const { username, password } = req.body;
+    console.log("Username received:", username);
+    const user = await authServices.findUserByUsername(username);
 
-  if (user && authServices.comparePassword(password, user.password)) {
-    const token = authServices.generateToken(user);
-
-    res.cookie("token", token, { httpOnly: true });
-    res.redirect("/todos");
-  } else {
-    res.render("login", { error: "Invalid username or password" });
+    if (user && authServices.comparePassword(password, user.password)) {
+      const token = authServices.generateToken(user);
+      res.cookie("token", token, { httpOnly: true });
+      res.redirect("/todos");
+    } else {
+      res.render("login", { error: "Invalid username or password" });
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).send("Internal server error");
   }
 };
 
 const register = async (req, res) => {
   const { username, password, email } = req.body;
+
   const existingUser = await authServices.findUserByUsername(username);
 
   if (existingUser) {

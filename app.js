@@ -1,10 +1,9 @@
 const express = require("express");
 const { create } = require("express-handlebars");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const methodOverride = require("method-override");
 const { createServer } = require("http");
-const { fileURLToPath } = require("url");
-const { dirname, join } = require("path");
+const { join } = require("path");
 const pkg = require("./models/index.js");
 const authRoutes = require("./routes/authRoutes.js");
 
@@ -27,7 +26,12 @@ app.set("views", join(__dirname, "views"));
 app.use(express.static(join(__dirname, "public")));
 
 // Set up body-parser
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+
+// Setting middleware : method-override
+app.use(methodOverride("_method"));
+
+app.use(express.json());
 
 // Set up cookie-parser
 app.use(cookieParser());
