@@ -1,36 +1,47 @@
-const authServices = require("../services/authService.js");
+const authService = require("../services/authService.js");
+const { BadRequestError, UnauthorizedError } = require("../utils/customErrors");
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    console.log("Username received:", username);
-    const user = await authServices.findUserByUsername(username);
 
-    if (user && authServices.comparePassword(password, user.password)) {
-      const token = authServices.generateToken(user);
-      res.cookie("token", token, { httpOnly: true });
-      res.redirect("/todos");
-    } else {
-      res.render("login", { error: "Invalid username or password" });
+    if (!username || !password) {
+      throw new BadRequestError("Username and password are required");
     }
+
+    const { user, token } = await authService.loginUser(username, password);
+
+    res.cookie("token", token, { httpOnly: true });
+    res.redirect("/todos");
   } catch (error) {
-    console.error("Error during login:", error);
-    res.status(500).send("Internal server error");
+    if (error instanceof UnauthorizedError) {
+      return res.status(401).render("login", { error: error.message });
+    }
+    next(error);
   }
 };
 
-const register = async (req, res) => {
-  const { username, password, email } = req.body;
+const register = async (req, res, next) => {
+  try {
+    const { username, password, email } = req.body;
 
-  const existingUser = await authServices.findUserByUsername(username);
+    if (!username || !password || !email) {
+      throw new BadRequestError("Username, password, and email are required");
+    }
 
-  if (existingUser) {
-    res.render("register", { error: "Username already taken" });
-  } else {
-    const user = await authServices.createUser(username, password, email);
-    const token = authServices.generateToken(user);
+    const { user, token } = await authService.registerUser(
+      username,
+      password,
+      email
+    );
+
     res.cookie("token", token, { httpOnly: true });
     res.redirect("/todos");
+  } catch (error) {
+    if (error instanceof BadRequestError) {
+      return res.status(400).render("register", { error: error.message });
+    }
+    next(error);
   }
 };
 

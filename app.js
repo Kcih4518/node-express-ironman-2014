@@ -4,11 +4,12 @@ const cookieParser = require("cookie-parser");
 const methodOverride = require("method-override");
 const { createServer } = require("http");
 const { join } = require("path");
-const pkg = require("./models/index.js");
+const { sequelize } = require("./models");
+
 const authRoutes = require("./routes/authRoutes.js");
 const todoRoutes = require("./routes/todoRoutes.js");
-
-const { sequelize } = pkg;
+const errorHandler = require("./middlewares/errorHandleMiddleware.js");
+const { NotFoundError } = require("./utils/customErrors");
 
 const app = express();
 const server = createServer(app);
@@ -53,10 +54,18 @@ app.use("/", authRoutes);
 app.use("/todos", todoRoutes);
 
 // Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
+
+// 404 handler
+app.use((req, res, next) => {
+  res.status(404).render("404", {
+    message:
+      "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+    layout: "main",
+  });
 });
+
+// Other error handler
+app.use(errorHandler);
 
 // Start server with Sequelize
 sequelize.sync().then(() => {
