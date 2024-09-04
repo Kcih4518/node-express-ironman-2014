@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { BadRequestError, UnauthorizedError } = require('../utils/customErrors');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const authService = {
   async loginUser(username, password) {

@@ -1,5 +1,5 @@
-const { Todo } = require("../models");
-const { NotFoundError, BadRequestError } = require("../utils/customErrors");
+const { Todo } = require('../models');
+const { NotFoundError, BadRequestError } = require('../utils/customErrors');
 
 class TodoService {
   async getAllTodos(userId) {
@@ -8,7 +8,7 @@ class TodoService {
 
   async createTodo(text, userId) {
     if (!text) {
-      throw new BadRequestError("Todo text is required");
+      throw new BadRequestError('Todo text is required');
     }
     return await Todo.create({ text, userId });
   }
@@ -16,7 +16,7 @@ class TodoService {
   async getTodoById(id, userId) {
     const todo = await Todo.findOne({ where: { id, userId } });
     if (!todo) {
-      throw new NotFoundError("Todo not found");
+      throw new NotFoundError('Todo not found');
     }
     return todo;
   }
@@ -30,7 +30,7 @@ class TodoService {
 
   async updateTodoText(id, text, userId) {
     if (!text) {
-      throw new BadRequestError("Todo text is required");
+      throw new BadRequestError('Todo text is required');
     }
     const todo = await this.getTodoById(id, userId);
     todo.text = text;
@@ -41,7 +41,7 @@ class TodoService {
   async deleteTodo(id, userId) {
     const todo = await this.getTodoById(id, userId);
     await todo.destroy();
-    return { message: "Todo deleted successfully" };
+    return { message: 'Todo deleted successfully' };
   }
 }
 

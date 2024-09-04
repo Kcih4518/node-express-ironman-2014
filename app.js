@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const { create } = require('express-handlebars');
 const cookieParser = require('cookie-parser');
@@ -68,8 +70,9 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 // Start server with Sequelize
+const PORT = process.env.PORT;
+
 sequelize.sync().then(() => {
-  const PORT = process.env.PORT || 3000;
   server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
 
